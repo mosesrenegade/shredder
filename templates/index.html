@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+    <h1>Shredder</h1>
+    <div class="container">
+    Shells:
+    {% for shell in base %}
+    <pre> Session: <a href = '/shell/{{ shell.id }}'>{{ shell.id }}</a> - {{ shell.shell_url }} - {{ shell.shell_type }}</pre>
+    {% endfor %}
+    Go Build a <a href="/build">Shell!</a></br>
+    Go Register a <a href="/registerShell">Shell!</a>
+    </div>
+{% endblock %}

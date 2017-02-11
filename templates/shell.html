@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="container">
+      <h1>Please give us a command</h1>
+
+      <p><br>Available Shells:
+        <ul>
+          <li><pre>{% for shell in base %} Session: <a href = '/shell/{{ shell.id }}'>{{ shell.id }}</a> - {{ shell.shell_url }} - {{ shell.shell_type }} {% endfor %}</pre></li>
+        </ul>
+
+        <br>
+
+        {% if id.id %}
+        Currently Controlling Shell: <a href="/shell/{{id.id}}">{{ id.id }}</a> - {{ id.shell_type }} - {{ id.shell_url }} </br>
+        Shell OS: {{ os }}</br>
+        User: {{ user }}
+        {% endif %}
+
+      {% if id.id %}
+      <form action="" method="post">
+        <input type="text" placeholder="id" name="cmd" value="{{ request.form.cmd }}">
+        <input class="btn btn-default" type="submit" value="go!">
+      </form>
+      {% endif %}
+
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+    <div class="container">
+    {% if output %}
+    <pre> {{ output }} </pre>
+    {% endif %}
+    </div>
+  {% endblock %}

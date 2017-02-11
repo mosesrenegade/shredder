@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="container">
+      <h1>Let's build a shell</h1>
+      <br>
+      <form action="" method="post">
+        <input type="text" placeholder="test.php" name="filename" value="{{ request.form.filename }}">
+        <input type="text" placeholder="function" name="cmdr" value="{{ request.form.function }}">
+        <input type="text" placeholder="php" name="shell type" value="{{ request.form.shell_type }}">
+        <input class="btn btn-default" type="submit" value="Build">
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+  {% endblock %}
