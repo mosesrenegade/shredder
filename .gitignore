@@ -25,6 +25,7 @@ build/
 dist/
 *egg*/
 docs/_build
+dump.rdb
 
 # Caches
 __pycache__
