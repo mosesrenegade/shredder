@@ -6,7 +6,7 @@
     {% for shell in base %}
     <pre> Session: <a href = '/shell/{{ shell.id }}'>{{ shell.id }}</a> - {{ shell.shell_url }} - {{ shell.shell_type }}</pre>
     {% endfor %}
-    Go Build a <a href="/build">Shell!</a></br>
-    Go Register a <a href="/registerShell">Shell!</a>
+    Go Build a <a href={{ url_for('build')}}>Shell!</a></br>
+    Go Register a <a href={{ url_for('new_shell')}}>Shell!</a>
     </div>
 {% endblock %}

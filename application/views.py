@@ -1,16 +1,8 @@
+from application import app, db
 from flask import Flask, request, flash, url_for, redirect, \
-     render_template, abort
-from flask_sqlalchemy import SQLAlchemy
+     render_template, abort, g, jsonify, current_app
 import requests
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config.from_pyfile('db.cfg')
-db = SQLAlchemy(app)
-
-from models import *
-from shells import *
-from core import *
+from .forms import LoginForm, NewShell
 
 errors = []
 
@@ -23,12 +15,43 @@ def index():
         errors.append("Error getting index")
   return render_template('index.html', base=base)
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for OpenID= remember_me=%s' %
+              (str(form.remember_me.data)))
+        return redirect('/index')
+    return render_template('login.html',
+                           title='Sign In',
+                           form=form)
+
 @app.route('/shell', methods = ['GET'])
 def shells():
     base =''
     base = Base.query.all()
 
     return render_template('shell.html', id=id, base=base)
+
+@app.route('/shell/new', methods = ['GET','POST'])
+def new_shell():
+    new = NewShell()
+    if new.validate_on_submit():
+
+        base = Base(shell_url = form.shell_url.data,
+            shell_type = form.shell_type.data)
+
+        db.session.add(base)
+
+    try:
+        db.session.commit()
+        return redirect(url_for('index'), form=form)
+    except:
+        print("Could not save new shell!")
+    else:
+        return render_template('new_shell.html', form=form)
+
+    return redirect(url_form(shell))
 
 @app.route('/shell/<int:id>', methods = ['GET','POST'])
 def shell(id):
@@ -77,18 +100,3 @@ def build():
         errors.append("Error getting shell")
         return render_template('build.html', errors=errors)
     return render_template('build.html', filename=filename, function=function, shell_type=shell_type)
-
-@app.route('/shell/add', methods = ['GET','POST'])
-def add_shell():
-    shell_type = ''
-    shell_url = ''
-    if request.method == 'POST':
-        base = Base(shell_url = request.form['shell_url'], shell_type = request.form['shell_type'])
-        db.session.add(base)
-        db.session.commit()
-        #return redirect('/')
-        return redirect(url_for('index'))
-    return render_template('add_shell.html', shell_type=shell_type, shell_url=shell_url)
-
-if __name__ == '__main__':
-    app.run()

@@ -1,9 +1,8 @@
-from app import db
+from application import db
 
 class Base(db.Model):
     __tablename__ = 'main'
-    __table_args__ = {'extend_existing': True}
-
+    __table_args__ = { 'extend_existing': True }
 
     id = db.Column(db.Integer, primary_key=True)
     shell_url = db.Column(db.String())
@@ -12,9 +11,6 @@ class Base(db.Model):
     def __init__(self, shell_url, shell_type):
         self.shell_url = shell_url
         self.shell_type = shell_type
-
-    def __repr__(self):
-        return '<id %r>' % (self.id)   
 
 class Commands(db.Model):
     __tablename__ = 'commands'
