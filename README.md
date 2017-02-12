@@ -12,33 +12,33 @@ How to install for Devs.
 OSX Users:
 
 ```
-$brew install python3
-$brew install sqlite3
-$pip3 install virtualenv
+$ brew install python3
+$ brew install sqlite3
+$ pip3 install virtualenv
 ```
 Clone the Repo:
 
 ```
-$git clone https://www.github.com/mosesrenegade/shredder
+$ git clone https://www.github.com/mosesrenegade/shredder
 ```
 
 Use virtualenv:
 
 ```
-$cd shredder
-$virtualenv venv
+$ cd shredder
+$ virtualenv venv
 ```
 
 Activate VirtualEnv:
 
 ```
-$. ./venv/bin/activate
+$ . ./venv/bin/activate
 ```
 
 Install dependencies
 
 ```
-$pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 The App Listens on port 5000 for development work.
@@ -46,8 +46,8 @@ The App Listens on port 5000 for development work.
 You need a Shell to test with:
 
 ```
-$cd shredders/shells
-$php -S localhost:8000
+$ cd shredders/shells
+$ php -S localhost:8000
 ```
 
 This will start a listening server on port 8000. Interact with it by going to the following test url:
