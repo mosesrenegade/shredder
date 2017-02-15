@@ -1,4 +1,5 @@
 from application import app, db
+from application import models
 from flask import Flask, request, flash, url_for, redirect, \
      render_template, abort, g, jsonify, current_app
 import requests
@@ -10,7 +11,7 @@ errors = []
 def index():
   base = ''
   try:
-      base = Base.query.all()
+      base = models.Base.query.all()
   except:
         errors.append("Error getting index")
   return render_template('index.html', base=base)
@@ -29,16 +30,17 @@ def login():
 @app.route('/shell', methods = ['GET'])
 def shells():
     base =''
-    base = Base.query.all()
+    base = models.Base.query.all()
 
     return render_template('shell.html', id=id, base=base)
 
 @app.route('/shell/new', methods = ['GET','POST'])
 def new_shell():
     new = NewShell()
+    form = ''
     if new.validate_on_submit():
 
-        base = Base(shell_url = form.shell_url.data,
+        base = models.Base(shell_url = form.shell_url.data,
             shell_type = form.shell_type.data)
 
         db.session.add(base)
@@ -50,8 +52,7 @@ def new_shell():
         print("Could not save new shell!")
     else:
         return render_template('new_shell.html', form=form)
-
-    return redirect(url_form(shell))
+    return render_template('new_shell.html', form=form)
 
 @app.route('/shell/<int:id>', methods = ['GET','POST'])
 def shell(id):
@@ -60,8 +61,8 @@ def shell(id):
     cmd = ''
     os = ''
 
-    id = Base.query.filter_by(id=id).first()
-    base = Base.query.all()
+    id = models.Base.query.filter_by(id=id).first()
+    base = models.Base.query.all()
 
     if request.method == 'POST':
         cmd = request.form['cmd']

@@ -5,6 +5,7 @@ Flask==0.12
 Flask-Migrate==2.0.3
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.1
+Flask-WTF==0.14.2
 itsdangerous==0.24
 Jinja2==2.9.5
 jsonify==0.5
@@ -19,3 +20,4 @@ rq==0.7.1
 six==1.10.0
 SQLAlchemy==1.1.5
 Werkzeug==0.11.15
+WTForms==2.1
